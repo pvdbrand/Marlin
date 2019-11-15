@@ -257,6 +257,15 @@ void GcodeSuite::G28(const bool always_home_all) {
     workspace_plane = PLANE_XY;
   #endif
 
+  if (parser.seen('S')) {
+    LOOP_XYZ(a) set_axis_is_at_home((AxisEnum)a);
+    sync_plan_position();
+    SERIAL_ECHOLNPGM("Simulated Homing");
+    report_current_position();
+    if (DEBUGGING(LEVELING)) DEBUG_ECHOLNPGM("<<< G28");
+    return;
+  }
+
   #define HAS_CURRENT_HOME(N) (defined(N##_CURRENT_HOME) && N##_CURRENT_HOME != N##_CURRENT)
   #define HAS_HOMING_CURRENT (HAS_CURRENT_HOME(X) || HAS_CURRENT_HOME(X2) || HAS_CURRENT_HOME(Y) || HAS_CURRENT_HOME(Y2))
 
