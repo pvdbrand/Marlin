@@ -503,9 +503,9 @@ void Endstops::update() {
   #define UPDATE_ENDSTOP_BIT(AXIS, MINMAX) SET_BIT_TO(live_state, _ENDSTOP(AXIS, MINMAX), (READ(_ENDSTOP_PIN(AXIS, MINMAX)) != _ENDSTOP_INVERTING(AXIS, MINMAX)))
   #define COPY_LIVE_STATE(SRC_BIT, DST_BIT) SET_BIT_TO(live_state, DST_BIT, TEST(live_state, SRC_BIT))
 
-  #if ENABLED(G38_PROBE_TARGET) && PIN_EXISTS(Z_MIN_PROBE) && !(CORE_IS_XY || CORE_IS_XZ)
-    // If G38 command is active check Z_MIN_PROBE for ALL movement
-    if (G38_move) UPDATE_ENDSTOP_BIT(Z, MIN_PROBE);
+  #if ENABLED(G38_PROBE_TARGET) && PIN_EXISTS(Z_MIN) && !(CORE_IS_XY || CORE_IS_XZ)
+    // If G38 command is active check Z_MIN for ALL movement
+    if (G38_move) UPDATE_ENDSTOP_BIT(Z, MIN);
   #endif
 
   // With Dual X, endstops are only checked in the homing direction for the active extruder
@@ -602,7 +602,7 @@ void Endstops::update() {
 
   // When closing the gap check the enabled probe
   #if HAS_CUSTOM_PROBE_PIN
-    UPDATE_ENDSTOP_BIT(Z, MIN_PROBE);
+    UPDATE_ENDSTOP_BIT(Z, MIN);
   #endif
 
   #if HAS_Z_MAX && !Z_SPI_SENSORLESS
@@ -686,14 +686,14 @@ void Endstops::update() {
     } \
   }while(0)
 
-  #if ENABLED(G38_PROBE_TARGET) && PIN_EXISTS(Z_MIN_PROBE) && !(CORE_IS_XY || CORE_IS_XZ)
+  #if ENABLED(G38_PROBE_TARGET) && PIN_EXISTS(Z_MIN) && !(CORE_IS_XY || CORE_IS_XZ)
     #if ENABLED(G38_PROBE_AWAY)
       #define _G38_OPEN_STATE (G38_move >= 4)
     #else
       #define _G38_OPEN_STATE LOW
     #endif
-    // If G38 command is active check Z_MIN_PROBE for ALL movement
-    if (G38_move && TEST_ENDSTOP(_ENDSTOP(Z, MIN_PROBE)) != _G38_OPEN_STATE) {
+    // If G38 command is active check Z_MIN for ALL movement
+    if (G38_move && TEST_ENDSTOP(_ENDSTOP(Z, MIN)) != _G38_OPEN_STATE) {
            if (stepper.axis_is_moving(X_AXIS)) { _ENDSTOP_HIT(X, MIN); planner.endstop_triggered(X_AXIS); }
       else if (stepper.axis_is_moving(Y_AXIS)) { _ENDSTOP_HIT(Y, MIN); planner.endstop_triggered(Y_AXIS); }
       else if (stepper.axis_is_moving(Z_AXIS)) { _ENDSTOP_HIT(Z, MIN); planner.endstop_triggered(Z_AXIS); }
@@ -764,7 +764,7 @@ void Endstops::update() {
 
       // When closing the gap check the enabled probe
       #if HAS_CUSTOM_PROBE_PIN
-        if (z_probe_enabled) PROCESS_ENDSTOP(Z, MIN_PROBE);
+        if (z_probe_enabled) PROCESS_ENDSTOP(Z, MIN);
       #endif
     }
     else { // Z +direction. Gantry up, bed down.
