@@ -403,7 +403,9 @@
  *   998 : Dummy Table that ALWAYS reads 25°C or the temperature defined below.
  *   999 : Dummy Table that ALWAYS reads 100°C or the temperature defined below.
  */
+//#define TEMP_SENSOR_0 1
 #define TEMP_SENSOR_0 999
+
 #define TEMP_SENSOR_1 0
 #define TEMP_SENSOR_2 0
 #define TEMP_SENSOR_3 0
@@ -473,10 +475,9 @@
 
   // If you are using a pre-configured hotend then you can use one of the value sets by uncommenting it
 
-  // MPCNC MK8
-  #define DEFAULT_Kp 17.98
-  #define DEFAULT_Ki .98
-  #define DEFAULT_Kd 83.62
+  #define DEFAULT_Kp 41.66
+  #define DEFAULT_Ki 3.71
+  #define DEFAULT_Kd 116.89
 
   // MakerGear
   //#define DEFAULT_Kp 7.0
